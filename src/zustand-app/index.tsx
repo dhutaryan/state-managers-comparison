@@ -2,7 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Row, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-import { Routing } from './pages';
+import { Routing } from './router';
 
 const loadingIcon = <LoadingOutlined spin />;
 

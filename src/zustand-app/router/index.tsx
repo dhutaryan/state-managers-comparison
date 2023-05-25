@@ -1,13 +1,16 @@
 import { Spin } from 'antd';
-import { FC, ReactNode, Suspense } from 'react';
+import { FC, ReactNode, Suspense, lazy } from 'react';
 import { Route, RouteProps, Routes } from 'react-router-dom';
 
-import { RoutePath } from '../../shared/lib';
+import { RoutePath } from '@shared/lib';
+import { AuthLayout } from '@shared/ui';
+
+const LoginPage = lazy(() => import('../auth/containers/login-page'));
 
 const ROUTES: RouteProps[] = [
   {
     path: RoutePath.LOGIN,
-    element: <span>LOGIN</span>,
+    element: <LoginPage />,
   },
   {
     path: RoutePath.SIGN_UP,
@@ -18,13 +21,15 @@ const ROUTES: RouteProps[] = [
 export const Routing = () => {
   return (
     <Routes>
-      {ROUTES.map((route) => (
-        <Route
-          key={route.path}
-          path={route.path}
-          element={<SuspenseElement element={route.element} />}
-        />
-      ))}
+      <Route element={<AuthLayout />}>
+        {ROUTES.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={<SuspenseElement element={route.element} />}
+          />
+        ))}
+      </Route>
     </Routes>
   );
 };
