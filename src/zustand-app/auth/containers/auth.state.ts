@@ -1,8 +1,11 @@
+import { notification } from 'antd';
 import { create } from 'zustand';
+import { redirect } from 'react-router-dom';
 
-import { LoginForm } from '@shared/ui';
-import { appState } from '@zustand/shared/store/app.state';
-import { getUser, getUsers } from '@shared/lib';
+import { LoginForm, SignUpForm } from '@shared/ui';
+import { appState } from '@zustand/shared/store';
+import { RoutePath, createUser, getUser, getUsers } from '@shared/lib';
+import { AxiosError, AxiosResponse } from 'axios';
 
 type LoginState = {
   isPending: boolean;
@@ -29,6 +32,38 @@ export const useLoginState = create<LoginState>((set) => {
           }),
         )
         .catch(() => set({ hasError: true }))
+        .finally(() => set({ isPending: false }));
+    },
+  };
+});
+
+type SignUpState = {
+  isPending: boolean;
+  emailExistError: boolean;
+  signUp: (
+    data: Omit<SignUpForm, 'confirmPassword'>,
+  ) => Promise<AxiosResponse<void> | void>;
+};
+
+export const useSignUpState = create<SignUpState>((set) => {
+  return {
+    isPending: false,
+    emailExistError: false,
+    success: false,
+    signUp: async (data) => {
+      set({ isPending: true, emailExistError: false });
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const [user] = await getUsers({ email: data.email }).then(
+        (response) => response.data,
+      );
+
+      if (user) {
+        set({ emailExistError: true, isPending: false });
+        throw new AxiosError('Email already exists');
+      }
+
+      return await createUser(data)
+        .catch(() => set({ emailExistError: true }))
         .finally(() => set({ isPending: false }));
     },
   };

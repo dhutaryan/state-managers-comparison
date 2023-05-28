@@ -7,6 +7,7 @@ import { AppLayout, AuthLayout, Header } from '@shared/ui';
 import { appState } from '@zustand/shared/store/app.state';
 
 const LoginPage = lazy(() => import('../auth/containers/login-page'));
+const SignUpPage = lazy(() => import('../auth/containers/sign-up-page'));
 
 const ROUTES: RouteProps[] = [
   {
@@ -15,7 +16,7 @@ const ROUTES: RouteProps[] = [
   },
   {
     path: RoutePath.SIGN_UP,
-    element: <span>SIGN UP</span>,
+    element: <SignUpPage />,
   },
 ];
 

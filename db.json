@@ -2,6 +2,7 @@
   "users": [
     {
       "id": "33519739-e601-48be-ab92-d03e85ac66c8",
+      "name": "User",
       "email": "testuser1@example.com"
     }
   ]

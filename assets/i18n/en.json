@@ -6,6 +6,7 @@
   },
   "DONT_HAVE_AN_ACCOUNT": "Don't have an account?",
   "FORM_ERROR": {
+    "EMAIL_ALREADY_EXISTS": "Email already exsists",
     "EMAIL_INVALID": "Email is invalid",
     "FIELD_IS_REQUIRED": "Field is required",
     "PASSWORD_DO_NOT_MATCH": "Passwords do not match"
@@ -23,5 +24,8 @@
   "MENU": {
     "DASHBOARD": "Dashboard",
     "LOGOUT": "Logout"
+  },
+  "NOTIFICATION": {
+    "SIGN_UP_SUCCESS": "You have been registered successfully"
   }
 }
