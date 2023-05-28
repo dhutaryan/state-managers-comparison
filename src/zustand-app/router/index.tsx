@@ -1,9 +1,10 @@
 import { Spin } from 'antd';
 import { FC, ReactNode, Suspense, lazy } from 'react';
-import { Route, RouteProps, Routes } from 'react-router-dom';
+import { Navigate, Route, RouteProps, Routes } from 'react-router-dom';
 
 import { RoutePath } from '@shared/lib';
-import { AuthLayout } from '@shared/ui';
+import { AppLayout, AuthLayout, Header } from '@shared/ui';
+import { appState } from '@zustand/shared/store/app.state';
 
 const LoginPage = lazy(() => import('../auth/containers/login-page'));
 
@@ -18,18 +19,51 @@ const ROUTES: RouteProps[] = [
   },
 ];
 
+const PRIVATE_ROUTES: RouteProps[] = [
+  {
+    path: RoutePath.DASHBOARD,
+    element: <span>DASHBOARD</span>,
+  },
+];
+
 export const Routing = () => {
+  const isAuth = appState((state) => state.isAuth);
+  const logout = appState((state) => state.logout);
+
   return (
     <Routes>
-      <Route element={<AuthLayout />}>
-        {ROUTES.map((route) => (
+      {isAuth ? (
+        <Route
+          element={
+            <AppLayout>
+              <Header onLogout={() => logout()} />
+            </AppLayout>
+          }
+        >
+          {PRIVATE_ROUTES.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={<SuspenseElement element={route.element} />}
+            />
+          ))}
           <Route
-            key={route.path}
-            path={route.path}
-            element={<SuspenseElement element={route.element} />}
+            path="*"
+            element={<Navigate to={RoutePath.DASHBOARD} replace />}
           />
-        ))}
-      </Route>
+        </Route>
+      ) : (
+        <Route element={<AuthLayout />}>
+          {ROUTES.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={<SuspenseElement element={route.element} />}
+            />
+          ))}
+          <Route path="*" element={<Navigate to={RoutePath.LOGIN} replace />} />
+        </Route>
+      )}
     </Routes>
   );
 };

@@ -19,5 +19,9 @@
   "HEADER": {
     "LOGIN": "Login",
     "REGISTRATION": "Registration"
+  },
+  "MENU": {
+    "DASHBOARD": "Dashboard",
+    "LOGOUT": "Logout"
   }
 }

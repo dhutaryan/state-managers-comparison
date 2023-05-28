@@ -1,18 +1,19 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Form, Input, Typography } from 'antd';
+import { Alert, Button, Card, Form, Input, Typography } from 'antd';
 import styled from '@emotion/styled';
 
 import { useFormRules } from '../../lib';
 
-interface LoginForm {
+export interface LoginForm {
   email: string;
   password: string;
 }
 
 type Props = {
   isPending: boolean;
+  hasError: boolean;
   onSubmit: (value: LoginForm) => void;
 };
 
@@ -22,12 +23,23 @@ const LoginCard = styled(Card)`
   margin: 0 auto;
 `;
 
-export const Login: FC<Props> = ({ isPending, onSubmit }) => {
+const ErrorAlert = styled(Alert)`
+  margin-bottom: 1.5rem;
+`;
+
+export const Login: FC<Props> = ({ isPending, hasError, onSubmit }) => {
   const { t } = useTranslation();
   const { required, email } = useFormRules();
 
   return (
     <LoginCard title={t('HEADER.LOGIN')}>
+      {hasError && (
+        <ErrorAlert
+          type="error"
+          description="Wrong email or password"
+          showIcon
+        />
+      )}
       <Form layout="vertical" requiredMark="optional" onFinish={onSubmit}>
         <Form.Item
           name="email"
